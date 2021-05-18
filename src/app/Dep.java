@@ -1,5 +1,7 @@
 package app;
 
+import java.awt.List;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 
@@ -7,8 +9,10 @@ public class Dep {
 
 	private Float toneladas = 0f; // 30 20 15
 	private String nombre = ""; // grande, mediano o chico
+	private ArrayList a = new ArrayList<>();
 	private String cerrado = ""; // Si o NO
 	private Float[] cantidadDep = null;
+	private int cuantosDep = -1;
 	///////////////////////////////////
 	Scanner sn = new Scanner(System.in);
 
@@ -24,10 +28,14 @@ public class Dep {
 		return cantidadDep;
 	}
 
+	public ArrayList getA() {
+		return a;
+	}
+
 	// Funcion que determina los depositos y cuantas toneladas entran en cada uno
 	public void setCantidadDep(Float[] cantidadDep) {
 		this.cantidadDep = cantidadDep;
-
+		this.cuantosDep = cantidadDep.length;
 		for (int i = 0; i < cantidadDep.length; i++) {
 			System.out.println(
 					"////////////////////////////////////////////////°°°°°////////////////////////////////////////////////");
@@ -44,31 +52,44 @@ public class Dep {
 	private void solucionFinal() {
 		// Calculo la ociosa
 		int xDeposito = calculoOciosa(this.cantidadDep, this.toneladas);
-		// Asigno el nombre del deposito
-		if (this.cantidadDep[xDeposito] >= 30f) {
-			this.nombre = "Grande";
-		} else if (this.cantidadDep[xDeposito] >= 20f && this.cantidadDep[xDeposito] < 30f) {
-			this.nombre = "Mediano";
-		} else {
-			this.nombre = "Pequeño";
-		}
+
 		System.out.println(
 				"////////////////////////////////////////////////°°°°°////////////////////////////////////////////////");
-		// Muestro por pantalla cantidad ociosa y el deposito que se cerrara
-		System.out.println(
-				"El depósito quedó con una capacidad ociosa de " + (this.cantidadDep[xDeposito] - this.toneladas));
-		this.cantidadDep[xDeposito] = 0f; // Depósito cerrado
+
 		System.out.println(
 				"////////////////////////////////////////////////°°°°°////////////////////////////////////////////////");
 		if (xDeposito >= 0) {
+			// Asigno el nombre del deposito
+			if (this.cantidadDep[xDeposito] >= 30f) {
+				this.nombre = "Grande";
+			} else if (this.cantidadDep[xDeposito] >= 20f && this.cantidadDep[xDeposito] < 30f) {
+				this.nombre = "Mediano";
+			} else {
+				this.nombre = "Pequeño";
+			}
+			// Muestro por pantalla cantidad ociosa y el deposito que se cerrara
 			System.out.println(
-					"En el depósito " + this.nombre + " caben las " + this.toneladas.intValue() + " toneladas");
+					"El depósito quedó con una capacidad ociosa de " + (this.cantidadDep[xDeposito] - this.toneladas));
+			System.out.println(
+					"////////////////////////////////////////////////°°°°°////////////////////////////////////////////////");
+			this.cerrado = this.cantidadDep[xDeposito].toString();
+			this.cantidadDep[xDeposito] = 0f; // Depósito cerrado
+			System.out.println(
+					"En el depósito " + this.nombre + " entraron las " + this.toneladas.intValue() + " toneladas");
 		} else {
-			System.out.println("No hay depósito para ese peso en toneladas  " + this.toneladas.intValue());
+
+			System.out.println("No hay depósito para ese peso en toneladas disponible " + this.toneladas.intValue());
+
 		}
-		System.out.println(
-				"////////////////////////////////////////////////°°°°°////////////////////////////////////////////////");
-		System.out.println("El deposito " + this.nombre + " se cerro");
+		if (xDeposito >= 0) {
+			System.out.println(
+					"////////////////////////////////////////////////°°°°°////////////////////////////////////////////////");
+			System.out.println("El deposito " + this.nombre + " se cerro");
+			// Voy guardando los depositos en una lista que me permite verla en la parte del
+			// sistema ingresando 1
+			a.add("El deposito " + this.nombre + " con la capacidad de " + this.cerrado
+					+ " esta cerrado y en 0 capacidad");
+		}
 
 	}
 
